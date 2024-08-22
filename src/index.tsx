@@ -17,6 +17,10 @@ const Audiomob = NativeModules.Audiomob
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return Audiomob.multiply(a, b);
+export function init(apiKey: string, bundleId: string): Promise<void> {
+  return Audiomob.init(apiKey, bundleId);
+}
+
+export function showAd(): void {
+  return Audiomob.showAd();
 }

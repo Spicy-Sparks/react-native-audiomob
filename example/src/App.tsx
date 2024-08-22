@@ -1,17 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-audiomob';
+import { init, showAd } from 'react-native-audiomob';
 
 export default function App() {
-  const [result, setResult] = useState<number | undefined>();
-
   useEffect(() => {
-    multiply(3, 7).then(setResult);
+    (async () => {
+      const apiKey = 'xxxxxxx';
+      const bundleId = 'xxxxxxx';
+      await init(apiKey, bundleId);
+      setTimeout(showAd, 3000);
+    })();
   }, []);
 
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <Text>AudioMob</Text>
     </View>
   );
 }
