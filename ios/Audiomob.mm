@@ -1,8 +1,28 @@
 #import "Audiomob.h"
 #import <AudiomobSDK/AudiomobSDK.h>
 
+NSString *const kInitCompleted = @"INIT_COMPLETED";
+NSString *const kAudioAdEnded = @"AUDIOAD_ENDED";
+NSString *const kAudioAdPaused = @"AUDIOAD_PAUSED";
+NSString *const kAudioAdResumed = @"AUDIOAD_RESUMED";
+NSString *const kAudioAdOpened = @"AUDIOAD_OPENED";
+NSString *const kAudioAdLoaded = @"AUDIOAD_LOADED";
+NSString *const kAudioAdFailedToLoad = @"AUDIOAD_FAILED_TO_LOAD";
+
 @implementation Audiomob
 RCT_EXPORT_MODULE()
+
+- (NSArray<NSString *> *)supportedEvents {
+    return @[
+        kInitCompleted,
+        kAudioAdEnded,
+        kAudioAdPaused,
+        kAudioAdResumed,
+        kAudioAdOpened,
+        kAudioAdLoaded,
+        kAudioAdFailedToLoad
+    ];
+}
 
 RCT_EXPORT_METHOD(init:(NSString *)apiKey
                   bundleId:(NSString *)bundleId
@@ -35,6 +55,9 @@ RCT_EXPORT_METHOD(init:(NSString *)apiKey
     
     [self.audioPlugin setAdAvailabilityDelegateWithDelegate:self];
     [self.audioPlugin setAdPlaybackDelegateWithDelegate:self];
+    [self.audioPlugin setAdRequestDelegateWithDelegate:self];
+    
+    [self.audioPlugin getAdAvailabilityWithPlacement:PlacementSkippable];
 
     resolve(nil);
 }
@@ -42,7 +65,7 @@ RCT_EXPORT_METHOD(init:(NSString *)apiKey
 RCT_EXPORT_METHOD(showAd:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject)
 {
-    [self.audioPlugin getAdAvailabilityWithPlacement:(enum Placement)PlacementRewarded];
+    [self.audioPlugin requestAndPlayAd];
     resolve(nil);
 }
 
@@ -68,19 +91,45 @@ RCT_EXPORT_METHOD(isPaused:(RCTPromiseResolveBlock)resolve
 
 - (void)onAdAvailabilityRetrievedWithAdAvailability:(AdAvailability*) adAvailability {
 #if DEBUG
-    [self.audioPlugin requestAndPlayAd];
+    [self sendEventWithName:kInitCompleted body:nil];
 #else
     if (adAvailability.adsAvailable)
-        [self.audioPlugin requestAndPlayAd];
+        [self sendEventWithName:kInitCompleted body:nil];
 #endif
 }
 
-- (void)onAdPlaybackStartedWithAudioAd:(AudioAd *)audioAd {
-    NSLog(@"OOOOH");
+- (void)onAdPlaybackCompletedWithAdPlaybackResult:(enum AdPlaybackResult)adPlaybackResult {
+    [self sendEventWithName:kAudioAdEnded body:nil];
 }
 
-- (void)onAdPlaybackCompletedWithAdPlaybackResult:(enum AdPlaybackResult)adPlaybackResult {
-    NSLog(@"OOOOH");
+- (void)onAdPlaybackStartedWithAudioAd:(AudioAd *)audioAd {
+    [self sendEventWithName:kAudioAdOpened body:nil];
+}
+
+- (void)onAdPausedWithPauseReason:(enum AdPauseReason)pauseReason {
+    [self sendEventWithName:kAudioAdPaused body:nil];
+}
+
+- (void)onAdResumed {
+    [self sendEventWithName:kAudioAdResumed body:nil];
+}
+
+- (void)onAdRequestCompletedWithAdRequestResult:(enum AdRequestResult)adRequestResult audioAd:(AudioAd * _Nullable)audioAd {
+    if (adRequestResult != AdRequestResultFinished) {
+        NSMutableDictionary *args = [[NSMutableDictionary alloc] init];
+        if (audioAd != nil) {
+            args[@"bannerImage"] = audioAd.companionBanner.image;
+            args[@"estimatedCpm"] = @(audioAd.estimatedCpm);
+            args[@"estimatedRevenue"] = @(audioAd.estimatedRevenue);
+            args[@"duration"] = @(audioAd.duration);
+        }
+        [self sendEventWithName:kAudioAdLoaded body:args];
+    }
+    else [self sendEventWithName:kAudioAdFailedToLoad body:nil];
+}
+
+- (void)onAdRequestStarted {
+    
 }
 
 @end
