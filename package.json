@@ -1,6 +1,6 @@
 {
   "name": "react-native-audiomob",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Audiomob ads adapter for react-native",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
@@ -39,7 +39,7 @@
     "example": "yarn workspace react-native-audiomob-example",
     "test": "jest",
     "typecheck": "tsc",
-    "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "prepare": "bob build",
     "release": "release-it"
