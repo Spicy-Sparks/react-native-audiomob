@@ -12,11 +12,14 @@ npm install react-native-audiomob
 
 
 ```js
-import { multiply } from 'react-native-audiomob';
+import { init, showAd } from 'react-native-audiomob';
 
-// ...
+const apiKey = 'xxxxxxx';
+const bundleId = 'xxxxxxx';
 
-const result = await multiply(3, 7);
+await init(apiKey, bundleId);
+
+showAd();
 ```
 
 
