@@ -108,7 +108,7 @@ class AudiomobModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
   }
 
   override fun onAdRequestCompleted(adRequestResult: AdRequestResult, audioAd: AudioAd?) {
-    if (adRequestResult != AdRequestResult.FINISHED) {
+    if (adRequestResult == AdRequestResult.FINISHED) {
       val args = Arguments.createMap()
       if (audioAd != null) {
         args.putString("bannerImage", audioAd.companionBanner?.image.toString())

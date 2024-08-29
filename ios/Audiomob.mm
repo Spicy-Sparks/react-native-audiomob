@@ -115,7 +115,7 @@ RCT_EXPORT_METHOD(isPaused:(RCTPromiseResolveBlock)resolve
 }
 
 - (void)onAdRequestCompletedWithAdRequestResult:(enum AdRequestResult)adRequestResult audioAd:(AudioAd * _Nullable)audioAd {
-    if (adRequestResult != AdRequestResultFinished) {
+    if (adRequestResult == AdRequestResultFinished) {
         NSMutableDictionary *args = [[NSMutableDictionary alloc] init];
         if (audioAd != nil) {
             args[@"bannerImage"] = audioAd.companionBanner.image;
