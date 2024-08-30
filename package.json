@@ -35,6 +35,11 @@
     "!**/__mocks__",
     "!**/.*"
   ],
+  "platforms": {
+    "ios": {
+      "podspecPath": "./react-native-audiomob.podspec"
+    }
+  },
   "scripts": {
     "example": "yarn workspace react-native-audiomob-example",
     "test": "jest",

@@ -1,0 +1,6 @@
+framework module AudiomobSDK {
+  umbrella header "AudiomobSDK.h"
+  export *
+
+  module * { export * }
+}

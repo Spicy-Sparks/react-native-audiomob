@@ -1,0 +1,544 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.9 effective-4.1.50 (swiftlang-5.9.0.128.108 clang-1500.0.40.1)
+// swift-module-flags: -target arm64-apple-ios11.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 4 -enforce-exclusivity=checked -O -module-name AudiomobSDK
+// swift-module-flags-ignorable: -enable-bare-slash-regex
+import AVFAudio
+import AVFoundation
+import AdSupport
+import AppTrackingTransparency
+import AudioToolbox
+@_exported import AudiomobSDK
+import CommonCrypto
+import CoreLocation
+import CoreTelephony
+import DeveloperToolsSupport
+import Foundation
+import ImageIO
+import MediaPlayer
+import MobileCoreServices
+import Network
+import Swift
+import SwiftUI
+import SystemConfiguration
+import UIKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+@objc public protocol CompanionBanner {
+  @objc var bannerSize: AudiomobSDK.BannerSize { get set }
+  @objc var image: Foundation.Data { get set }
+  @objc var backupBanner: Swift.Bool { get set }
+  @objc var gifBanner: Swift.Bool { get set }
+}
+extension UIKit.UIColor {
+  public static var customOrange: UIKit.UIColor {
+    get
+  }
+  public static var customBlack: UIKit.UIColor {
+    get
+  }
+}
+public class AudiomobOpenMeasurement {
+  public init()
+  @objc deinit
+}
+@objc public protocol AdPlayingNotice {
+  @objc func show()
+  @objc func hide()
+  @objc func showSkipButton()
+  @objc var countdown: any AudiomobSDK.Countdown { get }
+}
+@objc public protocol Countdown {
+  @objc var refreshRate: Swift.Double { get }
+  @objc func show()
+  @objc func hide()
+  @objc func updateCountdown(timeRemaining: Swift.Float, percentageRemaining: Swift.Float)
+}
+@_inheritsConvenienceInitializers @objc(AudiomobPlugin) final public class AudiomobPlugin : ObjectiveC.NSObject {
+  @objc override dynamic public init()
+  @objc final public var sendAdvertisingId: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc final public var sendConsentStrings: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc final public var sendIdfvAsAFallback: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc final public var doNotSendAnyDeviceIdsForNonConsentedUsers: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc final public var onlySendContextualSignals: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc final public var silentModeIsEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc final public var maxDuration: Swift.Int {
+    @objc get
+    @objc set
+  }
+  @objc final public func initialise(apiKey: Swift.String, bundleId: Swift.String, backgroundModeEnabled: Swift.Bool = false, completionHandler: ((Swift.Bool) -> Swift.Void)? = nil)
+  @objc final public func initialise(apiKey: Swift.String, bundleId: Swift.String, completionHandler: ((Swift.Bool) -> Swift.Void)? = nil)
+  @objc final public func requestAndPlayAd(unmutePrompt: (any AudiomobSDK.UnmutePrompt)? = nil, adPlayingNotice: (any AudiomobSDK.AdPlayingNotice)? = nil, placement: AudiomobSDK.Placement = .rewarded, banner: (any AudiomobSDK.Banner)? = nil, bannerSize: AudiomobSDK.BannerSize = .noBanner)
+  @objc final public func requestAndPlayAd()
+  @objc final public func onRaiseVolumePressed()
+  @objc final public func stopAd()
+  @objc final public func skipAd()
+  @available(*, deprecated, message: "Use getAdAvailability(placement) instead.")
+  @objc final public func getAdAvailability()
+  @objc final public func getAdAvailability(placement: AudiomobSDK.Placement)
+  @objc final public func setAdRequestDelegate(delegate: any AudiomobSDK.AdRequestDelegate)
+  @objc final public func setAdPlaybackDelegate(delegate: any AudiomobSDK.AdPlaybackDelegate)
+  @objc final public func setAdAvailabilityDelegate(delegate: any AudiomobSDK.AdAvailabilityDelegate)
+  @objc final public func pauseAd()
+  @objc final public func isAdPaused() -> Swift.Bool
+  @objc final public func resumePausedAd()
+  @objc final public func setCustomUser(type: Swift.String, id: Swift.String)
+  @objc final public func setForceTestAds(value: Swift.Bool)
+  @objc final public func setSendGeoLocation(value: Swift.Bool)
+  @objc final public func hasAdBegunPlaying() -> Swift.Bool
+  @objc final public func reportAd()
+  @objc final public func onBannerPressed()
+  @objc final public func getTimeRemaining() -> Swift.Float
+  @objc final public func deviceVolumeAboveThreshold(placement: AudiomobSDK.Placement) -> Swift.Bool
+  @objc final public func deviceVolumeIsAudible(placement: AudiomobSDK.Placement) -> Swift.Bool
+  @objc final public func getPlayingAd() -> AudiomobSDK.AudioAd?
+  @objc deinit
+}
+public typealias SilenceDetectionNotificationCompletion = ((_ mute: Swift.Bool) -> Swift.Void)
+public enum TrackingEvent : Swift.Int {
+  case impression
+  case start
+  case bannerDisplayed
+  case firstQuartile
+  case midpoint
+  case thirdQuartile
+  case complete
+  case pause
+  case resume
+  case skip
+  case stopped
+  case bannerClickthrough
+  case cancel
+  case error
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum AdRequestResult : Swift.Int {
+  case finished
+  case noAdAvailable
+  case frequencyCapReached
+  case failed
+  case skippableRequestVolumeNotAudible
+  case backgroundModeNotEnabled
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@_inheritsConvenienceInitializers @objc(AudiomobCountdown) @_Concurrency.MainActor(unsafe) public class AudiomobCountdown : UIKit.UIView, AudiomobSDK.Countdown {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @_Concurrency.MainActor(unsafe) @objc public func hide()
+  @_Concurrency.MainActor(unsafe) @objc public func show()
+  @_Concurrency.MainActor(unsafe) @objc public func updateCountdown(timeRemaining: Swift.Float, percentageRemaining: Swift.Float)
+  @_Concurrency.MainActor(unsafe) @objc public var refreshRate: Swift.Double {
+    @objc get
+  }
+  @_Concurrency.MainActor(unsafe) public func sendNotificationOnTimerEnd()
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc(AudiomobAdPlayingNotice) @_Concurrency.MainActor(unsafe) public class AudiomobAdPlayingNotice : UIKit.UIView, AudiomobSDK.AdPlayingNotice {
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var textColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var timerTextFontSize: CoreFoundation.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var timerBorderWidth: CoreFoundation.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var timerBackgroundColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var timerBorderFillColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var timerTextColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var heightRatio: CoreFoundation.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var widthRatio: CoreFoundation.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var audioAdText: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var audioImage: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var timerHeight: CoreFoundation.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var viewBackgroundColor: UIKit.UIColor? {
+    @objc get
+    @objc set
+  }
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @_Concurrency.MainActor(unsafe) @objc public func show()
+  @_Concurrency.MainActor(unsafe) @objc public var countdown: any AudiomobSDK.Countdown {
+    @objc get
+  }
+  @_Concurrency.MainActor(unsafe) @objc public func hide()
+  @_Concurrency.MainActor(unsafe) @objc public func showSkipButton()
+  @_Concurrency.MainActor(unsafe) public func onReportAdPressed()
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc(AudiomobUnmutePrompt) @_Concurrency.MainActor(unsafe) public class AudiomobUnmutePrompt : UIKit.UIView, AudiomobSDK.UnmutePrompt {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @_Concurrency.MainActor(unsafe) @objc public func hide()
+  @_Concurrency.MainActor(unsafe) @objc public func show(unmutePromptReason: AudiomobSDK.UnmutePromptShowReason, showStopButton: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) public func onRaiseVolumePressed()
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var unmutePromptBackgroundColor: UIKit.UIColor? {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var unmutePromptButtonColor: UIKit.UIColor? {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var alignment: CoreFoundation.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var unmutePromptButtonTitle: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var unmutePromptRaiseVolumeDescriptionTitle: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var unmutePromptMuteDescriptionTitle: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var unmutePromptFontColor: UIKit.UIColor? {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var fontSize: CoreFoundation.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc deinit
+}
+public class NetworkReachability {
+  public init()
+  @objc deinit
+}
+@objc public protocol AdRequestDelegate {
+  @objc optional func onAdRequestStarted()
+  @objc optional func onAdRequestCompleted(adRequestResult: AudiomobSDK.AdRequestResult, audioAd: AudiomobSDK.AudioAd?)
+}
+@objc public protocol AdPlaybackDelegate {
+  @objc optional func onAdPlaybackStarted(audioAd: AudiomobSDK.AudioAd)
+  @objc optional func onAdPlaybackCompleted(adPlaybackResult: AudiomobSDK.AdPlaybackResult)
+  @objc optional func onAdPaused(pauseReason: AudiomobSDK.AdPauseReason)
+  @objc optional func onAdResumed()
+}
+@objc public protocol AdAvailabilityDelegate {
+  @objc optional func onAdAvailabilityRetrieved(adAvailability: AudiomobSDK.AdAvailability)
+}
+@_hasMissingDesignatedInitializers @objc public class AdAvailability : ObjectiveC.NSObject {
+  @objc public var adsAvailable: Swift.Bool
+  @objc public var geo: Swift.String
+  @objc public var estimatedRevenue: Swift.Float
+  @objc public var estimatedCpm: Swift.Float
+  @objc deinit
+}
+public enum OMTrackingEvent : Swift.Int {
+  case impression
+  case start
+  case firstQuartile
+  case midpoint
+  case thirdQuartile
+  case finished
+  case paused
+  case resumed
+  case skipped
+  case clicked
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public enum HTTPMethod : Swift.String {
+  case options
+  case get
+  case head
+  case post
+  case put
+  case patch
+  case delete
+  case trace
+  case connect
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public typealias Parameters = [Swift.String : Any]
+public typealias HTTPHeaders = [Swift.String : Swift.String]
+public protocol RequestProtocol {
+  var baseURL: Swift.String { get }
+  var endPoint: Swift.String { get }
+  var method: AudiomobSDK.HTTPMethod { get }
+  var headers: AudiomobSDK.HTTPHeaders? { get }
+  var parameters: AudiomobSDK.Parameters? { get }
+}
+@_inheritsConvenienceInitializers @objc(AudiomobBanner) @_Concurrency.MainActor(unsafe) public class AudiomobBanner : UIKit.UIView, AudiomobSDK.Banner {
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var timerBorderWidth: CoreFoundation.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var timerBackgroundColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var timerBorderFillColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var timerTextColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var timerTextFontSize: CoreFoundation.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var heightRatio: CoreFoundation.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var widthRatio: CoreFoundation.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var timerHeight: CoreFoundation.CGFloat {
+    @objc get
+    @objc set
+  }
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @_Concurrency.MainActor(unsafe) @objc public func show(bannerSize: AudiomobSDK.BannerSize)
+  @_Concurrency.MainActor(unsafe) @objc public func hide()
+  @_Concurrency.MainActor(unsafe) @objc public func showSkipButton()
+  @_Concurrency.MainActor(unsafe) @objc public func onReportAdPressed()
+  @_Concurrency.MainActor(unsafe) @objc public func onBannerPressed()
+  @_Concurrency.MainActor(unsafe) @objc public var countdown: any AudiomobSDK.Countdown {
+    @objc get
+  }
+  @_Concurrency.MainActor(unsafe) @objc public var imageview: UIKit.UIImageView? {
+    @objc get
+  }
+  @objc deinit
+}
+public struct TrackingEventResponse : Swift.Codable {
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+@objc public enum UnmutePromptShowReason : Swift.Int {
+  case phoneMuted
+  case phoneVolumeLowered
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public protocol UnmutePrompt {
+  @objc func show(unmutePromptReason: AudiomobSDK.UnmutePromptShowReason, showStopButton: Swift.Bool)
+  @objc func hide()
+}
+@objc public class AudioAd : ObjectiveC.NSObject {
+  @objc public var estimatedRevenue: Swift.Float
+  @objc public var estimatedCpm: Swift.Float
+  @objc public var duration: Swift.Float
+  @objc public var id: Swift.String
+  @objc public var companionBanner: (any AudiomobSDK.CompanionBanner)?
+  public init(estimatedRevenue: Swift.Float, estimatedCpm: Swift.Float, duration: Swift.Float, id: Swift.String, companionBanner: (any AudiomobSDK.CompanionBanner)? = nil)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class Animator {
+  @objc deinit
+}
+@objc public enum AdPauseReason : Swift.Int {
+  case phoneVolumeLowered
+  case phoneMuted
+  case appInBackground
+  case pauseMethodCalled
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public enum AdFormat : Swift.Int {
+  case rewarded
+  case skippable
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum BannerSize : Swift.Int, Swift.CaseIterable {
+  case mediumRectangle
+  case mobileLeaderboard
+  case noBanner
+  public init?(rawValue: Swift.Int)
+  public typealias AllCases = [AudiomobSDK.BannerSize]
+  public typealias RawValue = Swift.Int
+  public static var allCases: [AudiomobSDK.BannerSize] {
+    get
+  }
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class CircleProgressBarView : UIKit.UIView {
+  @_Concurrency.MainActor(unsafe) public var timerBorderWidth: CoreFoundation.CGFloat {
+    get
+    set
+  }
+  @_Concurrency.MainActor(unsafe) public var timerBackgroundColor: UIKit.UIColor {
+    get
+    set
+  }
+  @_Concurrency.MainActor(unsafe) public var borderFillColor: UIKit.UIColor {
+    get
+    set
+  }
+  @_Concurrency.MainActor(unsafe) public var contentView: UIKit.UIView {
+    get
+  }
+  @_Concurrency.MainActor(unsafe) @objc required override dynamic public init(frame: CoreFoundation.CGRect)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder aDecoder: Foundation.NSCoder)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func draw(_ rect: CoreFoundation.CGRect)
+  @objc @_Concurrency.MainActor(unsafe) public func updateProgress(newValue: Swift.Float, animated: Swift.Bool)
+  @objc deinit
+}
+extension Foundation.URLSession {
+  public func request(_ request: any AudiomobSDK.RequestProtocol) -> Foundation.URLRequest?
+}
+@objc public enum AdPlaybackResult : Swift.Int {
+  case finished
+  case stopped
+  case failed
+  case skipped
+  case canceled
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public enum NetworkError : Swift.Error, Swift.Equatable {
+  case noAdAvailable
+  case frequencyReached
+  case invalidBody
+  case jsonDecodeFailed(_: Swift.String? = nil)
+  case incorrectApiKey
+  case timeout
+  case notFound
+  case serverError
+  case unexpected(Swift.Int, _: Swift.String? = nil)
+  public init(statusCode: Swift.Int, errorMessage: Swift.String? = nil)
+  public static func == (a: AudiomobSDK.NetworkError, b: AudiomobSDK.NetworkError) -> Swift.Bool
+}
+@objc public enum Placement : Swift.Int, Swift.CaseIterable {
+  case rewarded
+  case skippable
+  public var stringValue: Swift.String {
+    get
+  }
+  public init?(rawValue: Swift.Int)
+  public typealias AllCases = [AudiomobSDK.Placement]
+  public typealias RawValue = Swift.Int
+  public static var allCases: [AudiomobSDK.Placement] {
+    get
+  }
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public protocol Banner {
+  @available(*, deprecated, message: "Use our show(bannerSize: BannerSize) instead.")
+  @objc optional func show(bannerData: Foundation.Data, bannerSize: AudiomobSDK.BannerSize)
+  @objc optional func show(bannerSize: AudiomobSDK.BannerSize)
+  @objc func hide()
+  @objc func showSkipButton()
+  @objc func onReportAdPressed()
+  @objc func onBannerPressed()
+  @objc var countdown: any AudiomobSDK.Countdown { get }
+  @objc optional var imageview: UIKit.UIImageView? { get }
+}
+extension AudiomobSDK.TrackingEvent : Swift.Equatable {}
+extension AudiomobSDK.TrackingEvent : Swift.Hashable {}
+extension AudiomobSDK.TrackingEvent : Swift.RawRepresentable {}
+extension AudiomobSDK.AdRequestResult : Swift.Equatable {}
+extension AudiomobSDK.AdRequestResult : Swift.Hashable {}
+extension AudiomobSDK.AdRequestResult : Swift.RawRepresentable {}
+extension AudiomobSDK.OMTrackingEvent : Swift.Equatable {}
+extension AudiomobSDK.OMTrackingEvent : Swift.Hashable {}
+extension AudiomobSDK.OMTrackingEvent : Swift.RawRepresentable {}
+extension AudiomobSDK.HTTPMethod : Swift.Equatable {}
+extension AudiomobSDK.HTTPMethod : Swift.Hashable {}
+extension AudiomobSDK.HTTPMethod : Swift.RawRepresentable {}
+extension AudiomobSDK.UnmutePromptShowReason : Swift.Equatable {}
+extension AudiomobSDK.UnmutePromptShowReason : Swift.Hashable {}
+extension AudiomobSDK.UnmutePromptShowReason : Swift.RawRepresentable {}
+extension AudiomobSDK.AdPauseReason : Swift.Equatable {}
+extension AudiomobSDK.AdPauseReason : Swift.Hashable {}
+extension AudiomobSDK.AdPauseReason : Swift.RawRepresentable {}
+extension AudiomobSDK.AdFormat : Swift.Equatable {}
+extension AudiomobSDK.AdFormat : Swift.Hashable {}
+extension AudiomobSDK.AdFormat : Swift.RawRepresentable {}
+extension AudiomobSDK.BannerSize : Swift.Equatable {}
+extension AudiomobSDK.BannerSize : Swift.Hashable {}
+extension AudiomobSDK.BannerSize : Swift.RawRepresentable {}
+extension AudiomobSDK.AdPlaybackResult : Swift.Equatable {}
+extension AudiomobSDK.AdPlaybackResult : Swift.Hashable {}
+extension AudiomobSDK.AdPlaybackResult : Swift.RawRepresentable {}
+extension AudiomobSDK.Placement : Swift.Equatable {}
+extension AudiomobSDK.Placement : Swift.Hashable {}
+extension AudiomobSDK.Placement : Swift.RawRepresentable {}
