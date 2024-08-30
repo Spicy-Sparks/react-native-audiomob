@@ -15,6 +15,7 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.UiThreadUtil.runOnUiThread
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
 
@@ -57,19 +58,25 @@ class AudiomobModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
 
   @ReactMethod
   fun play(promise: Promise) {
-    audiomobPlugin?.resumePausedAd()
-    promise.resolve(null);
+    runOnUiThread {
+      audiomobPlugin?.resumePausedAd()
+      promise.resolve(null);
+    }
   }
 
   @ReactMethod
   fun pause(promise: Promise) {
-    audiomobPlugin?.pauseAd();
-    promise.resolve(null);
+    runOnUiThread {
+      audiomobPlugin?.pauseAd()
+      promise.resolve(null);
+    }
   }
 
   @ReactMethod
   fun isPaused(promise: Promise) {
-    promise.resolve(audiomobPlugin?.isAdPaused());
+    runOnUiThread {
+      promise.resolve(audiomobPlugin?.isAdPaused());
+    }
   }
 
   override fun onHostResume() {
@@ -112,9 +119,9 @@ class AudiomobModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
       val args = Arguments.createMap()
       if (audioAd != null) {
         args.putString("bannerImage", audioAd.companionBanner?.image.toString())
-        args.putLong("estimatedCpm", audioAd.estimatedCpm.toLong())
-        args.putLong("estimatedRevenue", audioAd.estimatedRevenue.toLong())
-        args.putLong("duration", audioAd.duration.toLong())
+        args.putDouble("estimatedCpm", audioAd.estimatedCpm.toDouble())
+        args.putDouble("estimatedRevenue", audioAd.estimatedRevenue.toDouble())
+        args.putDouble("duration", audioAd.duration.toDouble())
       }
       sendEvent(reactApplicationContext, "AUDIOAD_LOADED", args)
     }
