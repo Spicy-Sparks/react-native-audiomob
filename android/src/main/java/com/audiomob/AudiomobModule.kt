@@ -2,8 +2,10 @@ package com.audiomob
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.StrictMode
 import android.util.Base64
+import androidx.annotation.RequiresApi
 import com.audiomob.sdk.AudiomobPlugin
 import com.audiomob.sdk.data.responses.AdAvailability
 import com.audiomob.sdk.data.responses.AudioAd
@@ -121,11 +123,12 @@ class AudiomobModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
     sendEvent(reactApplicationContext, "AUDIOAD_OPENED", null)
   }
 
-  override fun onAdRequestCompleted(adRequestResult: AdRequestResult, audioAd: AudioAd?) {
+  override fun onAdRequestCompleted(adRequestResult: AdRequestResult, audioAd: AudioAd?) =
     if (adRequestResult == AdRequestResult.FINISHED) {
       val args = Arguments.createMap()
       if (audioAd != null) {
-        if(audioAd.companionBanner?.image != null) {
+        @RequiresApi(Build.VERSION_CODES.FROYO)
+        if (audioAd.companionBanner?.image != null) {
           val outputStream = ByteArrayOutputStream()
           audioAd.companionBanner?.image?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
           args.putString("bannerImage", "data:image/png;base64," + Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT))
@@ -137,7 +140,6 @@ class AudiomobModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
       sendEvent(reactApplicationContext, "AUDIOAD_LOADED", args)
     }
     else sendEvent(reactApplicationContext, "AUDIOAD_FAILED_TO_LOAD", null)
-  }
 
   override fun onAdRequestStarted() {
   }
