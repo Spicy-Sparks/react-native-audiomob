@@ -118,7 +118,10 @@ RCT_EXPORT_METHOD(isPaused:(RCTPromiseResolveBlock)resolve
     if (adRequestResult == AdRequestResultFinished) {
         NSMutableDictionary *args = [[NSMutableDictionary alloc] init];
         if (audioAd != nil) {
-            args[@"bannerImage"] = audioAd.companionBanner.image;
+            if (audioAd.companionBanner != nil) {
+                NSString *base64Str = [audioAd.companionBanner.image base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+                args[@"bannerImage"] = [@"data:image/png;base64," stringByAppendingString:base64Str];
+            }
             args[@"estimatedCpm"] = @(audioAd.estimatedCpm);
             args[@"estimatedRevenue"] = @(audioAd.estimatedRevenue);
             args[@"duration"] = @(audioAd.duration);
