@@ -53,6 +53,10 @@ class AudiomobModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
 
   @ReactMethod
   fun init(apiKey: String, bundleId: String, promise: Promise) {
+    if (audiomobPlugin != null) {
+      promise.resolve(null)
+      return
+    }
     audiomobPlugin = AudiomobPlugin(reactApplicationContext)
     audiomobPlugin?.initialise(apiKey, bundleId)
     audiomobPlugin?.setCallbacks(this)
