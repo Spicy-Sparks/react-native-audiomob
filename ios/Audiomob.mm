@@ -90,12 +90,13 @@ RCT_EXPORT_METHOD(isPaused:(RCTPromiseResolveBlock)resolve
 }
 
 - (void)onAdAvailabilityRetrievedWithAdAvailability:(AdAvailability*) adAvailability {
+    NSMutableDictionary *args = [[NSMutableDictionary alloc] init];
 #if DEBUG
-    [self sendEventWithName:kInitCompleted body:nil];
+    args[@"available"] = [NSNumber numberWithBool:YES];
 #else
-    if (adAvailability.adsAvailable)
-        [self sendEventWithName:kInitCompleted body:nil];
+    args[@"available"] = [NSNumber numberWithBool:adAvailability.adsAvailable];
 #endif
+    [self sendEventWithName:kInitCompleted body:args];
 }
 
 - (void)onAdPlaybackCompletedWithAdPlaybackResult:(enum AdPlaybackResult)adPlaybackResult {

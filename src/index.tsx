@@ -48,7 +48,7 @@ const isPaused = (): Promise<boolean> => {
 };
 
 const onInitCompleted = {
-  setListener: (listener: () => void) => {
+  setListener: (listener: (data: { available: boolean }) => void): void => {
     eventEmitter.removeAllListeners(ON_INIT_COMPLETED);
     eventEmitter.addListener(ON_INIT_COMPLETED, listener);
   },

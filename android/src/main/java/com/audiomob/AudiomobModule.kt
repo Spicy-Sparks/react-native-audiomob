@@ -106,9 +106,9 @@ class AudiomobModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
   }
 
   override fun onAdAvailabilityRetrieved(result: AdAvailability) {
-    if (BuildConfig.DEBUG || result.adsAvailable == true) {
-      sendEvent(reactApplicationContext, "INIT_COMPLETED", null)
-    }
+    val args = Arguments.createMap()
+    args.putBoolean("available", BuildConfig.DEBUG || result.adsAvailable == true)
+    sendEvent(reactApplicationContext, "INIT_COMPLETED", args)
   }
 
   override fun onAdPlaybackCompleted(adPlaybackResult: AdPlaybackResult) {
