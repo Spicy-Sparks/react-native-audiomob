@@ -49,7 +49,6 @@ const isPaused = (): Promise<boolean> => {
 
 const onInitCompleted = {
   setListener: (listener: (data: { available: boolean }) => void): void => {
-    eventEmitter.removeAllListeners(ON_INIT_COMPLETED);
     eventEmitter.addListener(ON_INIT_COMPLETED, listener);
   },
   removeListener: () => eventEmitter.removeAllListeners(ON_INIT_COMPLETED),
@@ -57,7 +56,6 @@ const onInitCompleted = {
 
 const onAudioAdEnded = {
   setListener: (listener: () => void) => {
-    eventEmitter.removeAllListeners(ON_AUDIOAD_ENDED);
     eventEmitter.addListener(ON_AUDIOAD_ENDED, listener);
   },
   removeListener: () => eventEmitter.removeAllListeners(ON_AUDIOAD_ENDED),
@@ -65,7 +63,6 @@ const onAudioAdEnded = {
 
 const onAudioAdPaused = {
   setListener: (listener: () => void) => {
-    eventEmitter.removeAllListeners(ON_AUDIOAD_PAUSED);
     eventEmitter.addListener(ON_AUDIOAD_PAUSED, listener);
   },
   removeListener: () => eventEmitter.removeAllListeners(ON_AUDIOAD_PAUSED),
@@ -73,7 +70,6 @@ const onAudioAdPaused = {
 
 const onAudioAdResumed = {
   setListener: (listener: () => void) => {
-    eventEmitter.removeAllListeners(ON_AUDIOAD_RESUMED);
     eventEmitter.addListener(ON_AUDIOAD_RESUMED, listener);
   },
   removeListener: () => eventEmitter.removeAllListeners(ON_AUDIOAD_RESUMED),
@@ -81,7 +77,6 @@ const onAudioAdResumed = {
 
 const onAudioAdOpened = {
   setListener: (listener: () => void) => {
-    eventEmitter.removeAllListeners(ON_AUDIOAD_OPENED);
     eventEmitter.addListener(ON_AUDIOAD_OPENED, listener);
   },
   removeListener: () => eventEmitter.removeAllListeners(ON_AUDIOAD_OPENED),
@@ -89,7 +84,6 @@ const onAudioAdOpened = {
 
 const onAudioAdLoaded = {
   setListener: (listener: () => void) => {
-    eventEmitter.removeAllListeners(ON_AUDIOAD_LOADED);
     eventEmitter.addListener(ON_AUDIOAD_LOADED, listener);
   },
   removeListener: () => eventEmitter.removeAllListeners(ON_AUDIOAD_LOADED),
@@ -97,7 +91,6 @@ const onAudioAdLoaded = {
 
 const onAudioAdFailedToLoaded = {
   setListener: (listener: () => void) => {
-    eventEmitter.removeAllListeners(ON_AUDIOAD_FAILED_TO_LOAD);
     eventEmitter.addListener(ON_AUDIOAD_FAILED_TO_LOAD, listener);
   },
   removeListener: () => eventEmitter.removeAllListeners(ON_AUDIOAD_FAILED_TO_LOAD),
