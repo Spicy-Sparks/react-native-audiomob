@@ -58,7 +58,7 @@ class AudiomobModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
       return
     }
     audiomobPlugin = AudiomobPlugin(reactApplicationContext)
-    audiomobPlugin?.initialise(apiKey, bundleId)
+    audiomobPlugin?.initialise(apiKey, bundleId, true)
     audiomobPlugin?.setCallbacks(this)
     audiomobPlugin?.getAdAvailability(Placement.SKIPPABLE)
     promise.resolve(null)
