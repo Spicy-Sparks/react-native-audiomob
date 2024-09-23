@@ -47,19 +47,21 @@ RCT_EXPORT_METHOD(init:(NSString *)apiKey
         NSLog(@"Error activating session: %@", error.localizedDescription);
     }
     
-    self.audioPlugin = [[AudiomobPlugin alloc] init];
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        self.audioPlugin = [[AudiomobPlugin alloc] init];
+        
+        [self.audioPlugin initialiseWithApiKey:apiKey
+                                 bundleId:bundleId
+                   backgroundModeEnabled:YES];
+        
+        [self.audioPlugin setAdAvailabilityDelegateWithDelegate:self];
+        [self.audioPlugin setAdPlaybackDelegateWithDelegate:self];
+        [self.audioPlugin setAdRequestDelegateWithDelegate:self];
+        
+        [self.audioPlugin getAdAvailabilityWithPlacement:PlacementSkippable];
 
-    [self.audioPlugin initialiseWithApiKey:apiKey
-                             bundleId:bundleId
-               backgroundModeEnabled:YES];
-    
-    [self.audioPlugin setAdAvailabilityDelegateWithDelegate:self];
-    [self.audioPlugin setAdPlaybackDelegateWithDelegate:self];
-    [self.audioPlugin setAdRequestDelegateWithDelegate:self];
-    
-    [self.audioPlugin getAdAvailabilityWithPlacement:PlacementSkippable];
-
-    resolve(nil);
+        resolve(nil);
+    });
 }
 
 RCT_EXPORT_METHOD(showAd:(RCTPromiseResolveBlock)resolve
